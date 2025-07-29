@@ -18,10 +18,14 @@ public class SimpleClient extends AbstractClient {
 		if (msg.getClass().equals(Warning.class)) {
 			EventBus.getDefault().post(new WarningEvent((Warning) msg));
 		}
-		else{
-			String message = msg.toString();
-			System.out.println(message);
+		else if (msg instanceof String && ((String) msg).startsWith("symbol:")) {
+			EventBus.getDefault().post(new StringEvent((String) msg));
+		} else if (msg instanceof il.cshaifasweng.OCSFMediatorExample.entities.GameState) {
+			EventBus.getDefault().post(msg);
+		} else {
+			System.out.println("Received unknown message: " + msg);
 		}
+
 	}
 	
 	public static SimpleClient getClient() {
